@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Scan URL - Vulnerability Scanner</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f0f4f8;
+            padding: 30px;
+            color: #333;
+        }
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 30px;
+        }
+        form {
+            max-width: 600px;
+            margin: 0 auto 40px auto;
+            display: flex;
+            gap: 10px;
+        }
+        input[type="text"] {
+            flex: 1;
+            padding: 12px 15px;
+            font-size: 16px;
+            border: 2px solid #3498db;
+            border-radius: 6px;
+            transition: border-color 0.3s ease;
+        }
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #2980b9;
+            box-shadow: 0 0 8px #2980b9aa;
+        }
+        button {
+            background-color: #3498db;
+            border: none;
+            color: white;
+            padding: 12px 25px;
+            font-size: 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+
+        /* Results container */
+        .results-container {
+            max-width: 700px;
+            margin: 0 auto;
+            animation: fadeIn 0.8s ease forwards;
+            opacity: 0;
+        }
+
+        /* Animation */
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* Vulnerability cards */
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        li {
+            background: white;
+            border-radius: 8px;
+            padding: 20px 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+            border-left: 8px solid;
+            transition: transform 0.3s ease;
+        }
+        li:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+        }
+
+        /* Colors based on vulnerability type */
+        li:nth-child(1) {
+            border-color: #e74c3c; /* Red for SQL Injection */
+        }
+        li:nth-child(2) {
+            border-color: #f39c12; /* Orange for XSS */
+        }
+        li:nth-child(3) {
+            border-color: #27ae60; /* Green for Directory Traversal */
+        }
+
+        /* Vulnerability heading */
+        strong {
+            font-size: 1.3em;
+            color: inherit;
+        }
+
+        /* Parameter highlight */
+        .param {
+            font-weight: 600;
+            color: #555;
+        }
+
+        /* Suggested fix style */
+        .fix {
+            margin-top: 10px;
+            font-style: italic;
+            color: #666;
+        }
+
+        /* Heading for results */
+        h2 {
+            text-align: center;
+            color: #34495e;
+            margin-bottom: 25px;
+        }
+
+    </style>
+</head>
+<body>
+    <h1>Vulnerability Scanner</h1>
+    
+    <form method="post" action="{{ url_for('scan') }}">
+        <label for="url" style="display:none;">Enter URL to Scan:</label>
+        <input type="text" id="url" name="url" value="{{ url or '' }}" placeholder="Enter URL to scan" required />
+        <button type="submit">Start Scanning</button>
+    </form>
+
+    {% if report %}
+    <div class="results-container">
+        <h2>Scan Results for <em>{{ url }}</em></h2>
+        <ul>
+            {% for item in report %}
+                <li>
+                    <strong>{{ item.type }}</strong><br/>
+                    {% if item.param %}
+                        <div class="param">Vulnerable Parameter: {{ item.param }}</div>
+                    {% endif %}
+                    <div class="fix">Suggested Fix: {{ item.fix }}</div>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+</body>
+</html>

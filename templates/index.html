@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Vulnerability Scanner - Overview</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0; padding: 0;
+      background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+      color: white;
+      min-height: 100vh;
+    }
+    header {
+      padding: 40px 20px;
+      text-align: center;
+      background: rgba(0, 0, 0, 0.3);
+    }
+    header h1 {
+      font-size: 3em;
+      margin-bottom: 10px;
+      text-shadow: 2px 2px 6px #000;
+    }
+    header p {
+      font-size: 1.3em;
+      max-width: 700px;
+      margin: 0 auto;
+      line-height: 1.5;
+      text-shadow: 1px 1px 3px #000;
+    }
+    main {
+      padding: 30px 20px;
+      max-width: 900px;
+      margin: 40px auto;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 15px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.3);
+    }
+    main h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #ff5656;
+      text-shadow: 1px 1px 4px #800000;
+    }
+    main ul {
+      font-size: 1.1em;
+      line-height: 1.6;
+      margin-left: 20px;
+    }
+    main ul li {
+      margin-bottom: 12px;
+    }
+    .start-button {
+      display: block;
+      width: 200px;
+      margin: 40px auto 20px;
+      padding: 15px;
+      background: #ff5656;
+      border: none;
+      border-radius: 8px;
+      font-size: 1.2em;
+      color: white;
+      cursor: pointer;
+      box-shadow: 0 5px 15px #c74444;
+      transition: background 0.3s ease;
+    }
+    .start-button:hover {
+      background: #cc4444;
+      box-shadow: 0 6px 20px #a63333;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Welcome to Web Vulnerability Scanner</h1>
+  <p>
+    Discover security weaknesses in your websites and applications quickly and easily.
+    Our tool scans for common vulnerabilities to help you keep your systems safe.
+  </p>
+</header>
+
+<main>
+  <h2>What We Detect</h2>
+  <p>Our scanner currently tests for these basic vulnerabilities:</p>
+  <ul>
+    <li><strong>SQL Injection:</strong> Attackers can manipulate your database queries.</li>
+    <li><strong>Cross-Site Scripting (XSS):</strong> Malicious scripts can be injected into web pages.</li>
+    <li><strong>Directory Traversal:</strong> Unauthorized access to server files through URL manipulation.</li>
+  </ul>
+
+  <h2>Why Is It Important?</h2>
+  <p>
+    Identifying and fixing these vulnerabilities protects your data, users, and reputation.
+    Regular scanning helps you stay one step ahead of attackers.
+  </p>
+
+  <a href="{{ url_for('scan') }}">
+    <button class="start-button">Start Scanning</button>
+</a>
+
+
+
+</main>
+
+</body>
+</html>

@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Web Vulnerability Scanner</title>
+    <style>
+        /* Base styles */
+        body { 
+            font-family: Arial, sans-serif; 
+            margin: 40px; 
+            background: linear-gradient(-45deg, #ff9a9e, #fad0c4, #fad0c4, #ff9a9e);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            color: #333;
+        }
+        input[type=text], input[type=url] { 
+            width: 80%; 
+            padding: 10px; 
+            font-size: 16px; 
+            border: 2px solid #888;
+            border-radius: 5px;
+            transition: border-color 0.3s ease;
+        }
+        input[type=url]:focus {
+            border-color: #ff6f61;
+            outline: none;
+            box-shadow: 0 0 8px #ff6f61;
+        }
+        button { 
+            padding: 10px 20px; 
+            font-size: 16px; 
+            cursor: pointer;
+            background: linear-gradient(45deg, #ff6f61, #ff9472);
+            border: none;
+            border-radius: 5px;
+            color: white;
+            font-weight: bold;
+            transition: background 0.5s ease;
+            box-shadow: 0 4px 15px rgba(255,111,97,0.6);
+        }
+        button:hover {
+            background: linear-gradient(45deg, #ff9472, #ff6f61);
+            box-shadow: 0 6px 20px rgba(255,111,97,0.8);
+        }
+        .error { 
+            color: rgb(72, 76, 71); 
+            font-weight: bold;
+            margin-top: 20px;
+            animation: fadeIn 1.5s ease forwards;
+        }
+        .vuln { 
+            background: #ffe6e6; 
+            padding: 10px; 
+            margin: 10px 0; 
+            border-left: 5px solid red;
+            animation: slideInLeft 0.6s ease forwards;
+            box-shadow: 0 0 10px rgba(255,0,0,0.2);
+            border-radius: 4px;
+        }
+        .safe { 
+            background: #e6ffe6; 
+            padding: 10px; 
+            margin: 10px 0; 
+            border-left: 5px solid green;
+            animation: slideInRight 0.6s ease forwards;
+            box-shadow: 0 0 10px rgba(0,255,0,0.2);
+            border-radius: 4px;
+        }
+
+        /* Animations */
+        @keyframes gradientBG {
+            0%{background-position:0% 50%}
+            50%{background-position:100% 50%}
+            100%{background-position:0% 50%}
+        }
+        @keyframes fadeIn {
+            from {opacity: 0;}
+            to {opacity: 1;}
+        }
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Web Vulnerability Scanner</h1>
+   <form method="POST" class="row g-3" onsubmit="showSpinner()">
+  <div class="col-12 col-md-8">
+    <input type="url"
+           name="url"
+           class="form-control"
+           placeholder="https://example.com/page.php?id=1"
+           value="{{ url|default('') }}"
+           required>
+  </div>
+
+  <div class="col-12 col-md-4 d-grid gap-2 d-md-flex justify-content-md-center align-items-center" style="height: 100%;">
+    <button name="action" value="url" class="btn btn-primary">URL Scan</button>
+  </div>
+</form>
+
+
+    {% if error %}
+        <p class="error">{{ error }}</p>
+    {% endif %}
+    {% if report %}
+        <h2>Scan Results:</h2>
+        {% for item in report %}
+            {% if item.param %}
+                <div class="vuln">
+                    <strong>{{ item.type }} found in parameter: {{ item.param }}</strong><br />
+                    <em>Improvement:</em> {{ item.fix }}
+                </div>
+            {% else %}
+                <div class="safe">
+                    <strong>{{ item.type }}:</strong> {{ item.fix }}
+                </div>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+</body>
+</html>
