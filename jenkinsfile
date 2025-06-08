@@ -3,12 +3,14 @@ pipeline {
 
     environment {
         IMAGE_NAME = "flask-scanner"
+        CONTAINER_NAME = "scanner-app"
+        PORT = "5000"
     }
 
     stages {
-        stage('Clone Repository') {
+        stage('Clone') {
             steps {
-                git 'https://github.com/yourusername/web-vuln-scanner.git'
+                git 'https://github.com/cipher0247/DEVOPS.git'
             }
         }
 
@@ -20,10 +22,18 @@ pipeline {
             }
         }
 
-        stage('Run Container') {
+        stage('Remove Old Container') {
             steps {
                 script {
-                    docker.image(IMAGE_NAME).run('-p 5000:5000')
+                    sh "docker rm -f ${CONTAINER_NAME} || true"
+                }
+            }
+        }
+
+        stage('Run New Container') {
+            steps {
+                script {
+                    sh "docker run -d -p ${PORT}:${PORT} --name ${CONTAINER_NAME} ${IMAGE_NAME}"
                 }
             }
         }
