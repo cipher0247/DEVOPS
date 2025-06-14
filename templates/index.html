@@ -2,82 +2,127 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Vulnerability Analyzer - Overview2</title>
+  <title>Vulnerability Analyzer - Matrix Mode</title>
   <style>
+    /* MATRIX BACKGROUND */
     body {
-      font-family: Arial, sans-serif;
-      margin: 0; padding: 0;
-      background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
-      color: white;
-      min-height: 100vh;
+      margin: 0;
+      font-family: 'Courier New', monospace;
+      background: black;
+      color: #00ff88;
+      overflow: hidden;
     }
+
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: -1;
+    }
+
+    /* HEADER STYLING */
     header {
-      padding: 40px 20px;
       text-align: center;
-      background: rgba(0, 0, 0, 0.3);
+      padding: 60px 20px 30px;
     }
+
     header h1 {
       font-size: 3em;
-      margin-bottom: 10px;
-      text-shadow: 2px 2px 6px #000;
+      color: #00ffcc;
+      text-shadow: 0 0 10px #00ffcc, 0 0 20px #00ffcc;
+      animation: flicker 2s infinite;
     }
+
     header p {
-      font-size: 1.3em;
+      font-size: 1.2em;
       max-width: 700px;
       margin: 0 auto;
       line-height: 1.5;
-      text-shadow: 1px 1px 3px #000;
+      color: #66ffcc;
+      animation: typing 4s steps(60, end), blink 1s step-end infinite;
+      white-space: nowrap;
+      overflow: hidden;
+      border-right: 2px solid #66ffcc;
     }
+
+    @keyframes typing {
+      from { width: 0 }
+      to { width: 100% }
+    }
+
+    @keyframes blink {
+      50% { border-color: transparent }
+    }
+
+    /* MAIN BOX */
     main {
-      padding: 30px 20px;
+      padding: 40px 20px;
       max-width: 900px;
       margin: 40px auto;
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 15px;
-      box-shadow: 0 0 15px rgba(0,0,0,0.3);
+      background: rgba(0, 255, 128, 0.1);
+      border: 1px solid #00ff88;
+      border-radius: 10px;
+      box-shadow: 0 0 10px #00ff88;
     }
+
     main h2 {
       text-align: center;
-      margin-bottom: 20px;
-      color: #ff5656;
-      text-shadow: 1px 1px 4px #800000;
+      color: #ff4477;
+      text-shadow: 0 0 5px #ff4477, 0 0 10px #ff4477;
+      margin-top: 30px;
     }
-    main ul {
+
+    main p, main ul {
       font-size: 1.1em;
-      line-height: 1.6;
-      margin-left: 20px;
+      line-height: 1.7;
+      margin: 20px;
+      color: #ccffdd;
     }
-    main ul li {
+
+    ul {
+      list-style: square;
+    }
+
+    ul li {
       margin-bottom: 12px;
     }
+
+    /* BUTTON */
     .start-button {
       display: block;
-      width: 200px;
-      margin: 40px auto 20px;
+      width: 220px;
+      margin: 40px auto;
       padding: 15px;
-      background: #ff5656;
+      font-size: 1.2em;
+      color: #000;
+      background: #00ff88;
       border: none;
       border-radius: 8px;
-      font-size: 1.2em;
-      color: white;
       cursor: pointer;
-      box-shadow: 0 5px 15px #c74444;
-      transition: background 0.3s ease;
+      box-shadow: 0 0 15px #00ff88, 0 0 25px #00ff88;
+      transition: transform 0.3s ease, background 0.3s ease;
     }
+
     .start-button:hover {
-      background: #cc4444;
-      box-shadow: 0 6px 20px #a63333;
+      background: #00ffaa;
+      transform: scale(1.05);
+      box-shadow: 0 0 25px #00ffaa, 0 0 35px #00ffaa;
+    }
+
+    @keyframes flicker {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.8; }
     }
   </style>
 </head>
 <body>
 
+<!-- MATRIX CANVAS BACKGROUND -->
+<canvas id="matrix"></canvas>
+
 <header>
   <h1>Welcome to Web Vulnerabilities</h1>
-  <p>
-    Discover security weaknesses in your websites and applications quickly and easily.
-    Our tool scans for common vulnerabilities to help you keep your systems safe.
-  </p>
+  <p>Discover security flaws in your websites before attackers do...</p>
 </header>
 
 <main>
@@ -96,12 +141,44 @@
   </p>
 
   <a href="{{ url_for('scan') }}">
-    <button class="start-button">Start Scanning</button>
-</a>
-
-
-
+    <button class="start-button">▶ Start Scanning</button>
+  </a>
 </main>
+
+<!-- MATRIX ANIMATION SCRIPT -->
+<script>
+  const canvas = document.getElementById("matrix");
+  const ctx = canvas.getContext("2d");
+
+  canvas.height = window.innerHeight;
+  canvas.width = window.innerWidth;
+
+  const chars = "01";
+  const fontSize = 14;
+  const columns = canvas.width / fontSize;
+
+  const drops = [];
+  for (let i = 0; i < columns; i++) drops[i] = 1;
+
+  function drawMatrix() {
+    ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    ctx.fillStyle = "#00ff88";
+    ctx.font = fontSize + "px Courier New";
+
+    for (let i = 0; i < drops.length; i++) {
+      const text = chars[Math.floor(Math.random() * chars.length)];
+      ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+      if (drops[i] * fontSize > canvas.height || Math.random() > 0.95) drops[i] = 0;
+
+      drops[i]++;
+    }
+  }
+
+  setInterval(drawMatrix, 50);
+</script>
 
 </body>
 </html>

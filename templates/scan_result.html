@@ -1,150 +1,153 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <title>Scan URL - Vulnerability Scanner</title>
-    <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #f0f4f8;
-            padding: 30px;
-            color: #333;
-        }
-        h1 {
-            text-align: center;
-            color: #2c3e50;
-            margin-bottom: 30px;
-        }
-        form {
-            max-width: 600px;
-            margin: 0 auto 40px auto;
-            display: flex;
-            gap: 10px;
-        }
-        input[type="text"] {
-            flex: 1;
-            padding: 12px 15px;
-            font-size: 16px;
-            border: 2px solid #3498db;
-            border-radius: 6px;
-            transition: border-color 0.3s ease;
-        }
-        input[type="text"]:focus {
-            outline: none;
-            border-color: #2980b9;
-            box-shadow: 0 0 8px #2980b9aa;
-        }
-        button {
-            background-color: #3498db;
-            border: none;
-            color: white;
-            padding: 12px 25px;
-            font-size: 16px;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-        button:hover {
-            background-color: #2980b9;
-        }
+  <meta charset="UTF-8" />
+  <title>Scan URL - Vulnerability Scanner</title>
+  <style>
+    body {
+      font-family: 'Courier New', monospace;
+      background-color: #000;
+      background-image: linear-gradient(180deg, rgba(0,0,0,1), rgba(0,25,0,0.9));
+      color: #00ff88;
+      padding: 40px 20px;
+    }
 
-        /* Results container */
-        .results-container {
-            max-width: 700px;
-            margin: 0 auto;
-            animation: fadeIn 0.8s ease forwards;
-            opacity: 0;
-        }
+    h1 {
+      text-align: center;
+      font-size: 2.5em;
+      text-shadow: 0 0 10px #00ff88, 0 0 30px #00ff88;
+      animation: flicker 1.5s infinite;
+    }
 
-        /* Animation */
-        @keyframes fadeIn {
-            to {
-                opacity: 1;
-            }
-        }
+    form {
+      max-width: 700px;
+      margin: 30px auto;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
 
-        /* Vulnerability cards */
-        ul {
-            list-style: none;
-            padding: 0;
-        }
-        li {
-            background: white;
-            border-radius: 8px;
-            padding: 20px 25px;
-            margin-bottom: 20px;
-            box-shadow: 0 3px 8px rgba(0,0,0,0.1);
-            border-left: 8px solid;
-            transition: transform 0.3s ease;
-        }
-        li:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 6px 15px rgba(0,0,0,0.15);
-        }
+    input[type="text"] {
+      flex: 1;
+      padding: 12px 18px;
+      font-size: 16px;
+      background: #101010;
+      color: #00ff88;
+      border: 2px solid #00ff88;
+      border-radius: 8px;
+      box-shadow: 0 0 10px #00ff88;
+      transition: all 0.3s ease;
+    }
 
-        /* Colors based on vulnerability type */
-        li:nth-child(1) {
-            border-color: #e74c3c; /* Red for SQL Injection */
-        }
-        li:nth-child(2) {
-            border-color: #f39c12; /* Orange for XSS */
-        }
-        li:nth-child(3) {
-            border-color: #27ae60; /* Green for Directory Traversal */
-        }
+    input[type="text"]:focus {
+      outline: none;
+      background: #000;
+      border-color: #00ffaa;
+      box-shadow: 0 0 20px #00ffaa;
+    }
 
-        /* Vulnerability heading */
-        strong {
-            font-size: 1.3em;
-            color: inherit;
-        }
+    button {
+      background: #00ff88;
+      color: #000;
+      border: none;
+      padding: 12px 30px;
+      font-weight: bold;
+      font-size: 1em;
+      border-radius: 8px;
+      cursor: pointer;
+      box-shadow: 0 0 15px #00ff88, 0 0 25px #00ffaa;
+      transition: 0.3s ease;
+    }
 
-        /* Parameter highlight */
-        .param {
-            font-weight: 600;
-            color: #555;
-        }
+    button:hover {
+      background: #00ffaa;
+      transform: scale(1.05);
+      box-shadow: 0 0 25px #00ffaa, 0 0 40px #00ffaa;
+    }
 
-        /* Suggested fix style */
-        .fix {
-            margin-top: 10px;
-            font-style: italic;
-            color: #666;
-        }
+    h2 {
+      text-align: center;
+      color: #00ffcc;
+      margin: 50px 0 20px;
+      text-shadow: 0 0 10px #00ffee;
+    }
 
-        /* Heading for results */
-        h2 {
-            text-align: center;
-            color: #34495e;
-            margin-bottom: 25px;
-        }
+    .results-container {
+      max-width: 750px;
+      margin: 0 auto;
+      animation: fadeIn 1s ease-in-out;
+    }
 
-    </style>
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    li {
+      background: rgba(0, 255, 136, 0.05);
+      border-left: 5px solid #00ff88;
+      padding: 20px;
+      margin-bottom: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,255,136,0.2);
+      transition: 0.3s ease;
+    }
+
+    li:hover {
+      background: rgba(0, 255, 136, 0.1);
+      transform: translateY(-5px);
+      box-shadow: 0 0 20px rgba(0,255,136,0.5);
+    }
+
+    .param {
+      font-weight: bold;
+      color: #00ffff;
+      margin-top: 8px;
+    }
+
+    .fix {
+      font-style: italic;
+      color: #80ffdc;
+      margin-top: 6px;
+    }
+
+    @keyframes flicker {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.85; }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
 </head>
 <body>
-    <h1>Vulnerability Scanner</h1>
-    
-    <form method="post" action="{{ url_for('scan') }}">
-        <label for="url" style="display:none;">Enter URL to Scan:</label>
-        <input type="text" id="url" name="url" value="{{ url or '' }}" placeholder="Enter URL to scan" required />
-        <button type="submit">Start Scanning</button>
-    </form>
 
-    {% if report %}
+  <h1>💻 Web Vulnerability Scanner</h1>
+
+  <form method="post" action="{{ url_for('scan') }}">
+    <input type="text" id="url" name="url" value="{{ url or '' }}" placeholder="https://example.com/?id=1" required />
+    <button type="submit">▶ Start Scan</button>
+  </form>
+
+  {% if report %}
     <div class="results-container">
-        <h2>Scan Results for <em>{{ url }}</em></h2>
-        <ul>
-            {% for item in report %}
-                <li>
-                    <strong>{{ item.type }}</strong><br/>
-                    {% if item.param %}
-                        <div class="param">Vulnerable Parameter: {{ item.param }}</div>
-                    {% endif %}
-                    <div class="fix">Suggested Fix: {{ item.fix }}</div>
-                </li>
-            {% endfor %}
-        </ul>
+      <h2>🔍 Scan Results for <em>{{ url }}</em></h2>
+      <ul>
+        {% for item in report %}
+          <li>
+            <strong>{{ item.type }}</strong>
+            {% if item.param %}
+              <div class="param">Vulnerable Parameter: {{ item.param }}</div>
+            {% endif %}
+            <div class="fix">Suggested Fix: {{ item.fix }}</div>
+          </li>
+        {% endfor %}
+      </ul>
     </div>
-    {% endif %}
+  {% endif %}
+
 </body>
 </html>
